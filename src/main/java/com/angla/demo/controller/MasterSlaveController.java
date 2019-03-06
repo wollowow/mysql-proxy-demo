@@ -30,9 +30,7 @@ public class MasterSlaveController {
     @RequestMapping("insert")
     @ResponseBody
     public Object insert(HttpServletRequest req, MasterSlaveModel masterSlave) {
-        masterSlave.setName("hahaha");
-        Object list =  masterSlaveService.insert(masterSlave);
-        return list;
+        return masterSlaveService.insert(masterSlave);
     }
 
     /**
@@ -41,8 +39,6 @@ public class MasterSlaveController {
     @RequestMapping("getList")
     @ResponseBody
     public Object getList(HttpServletRequest req, MasterSlaveModel masterSlave) {
-        masterSlave.setId(1L);
-        Object list =  masterSlaveService.getList(masterSlave);
-        return list;
+        return masterSlaveService.getList(masterSlave);
     }
 }

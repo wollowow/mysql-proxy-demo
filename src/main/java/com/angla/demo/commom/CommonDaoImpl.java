@@ -1,6 +1,5 @@
 package com.angla.demo.commom;
 
-import com.angla.demo.datasource.DataSourceContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
 
@@ -22,7 +21,6 @@ public class CommonDaoImpl implements CommonDao{
     }
 
     public int update(String id, Object param) {
-        DataSourceContextHolder.setDatabaseType("master");
         return sqlSessionTemplate.update(id,param);
     }
 
@@ -31,22 +29,19 @@ public class CommonDaoImpl implements CommonDao{
     }
 
     public int insert(String id, Object param) {
-        DataSourceContextHolder.setDatabaseType("master");
-        int result =  sqlSessionTemplate.insert(id,param);
-        return result;
+        return sqlSessionTemplate.insert(id,param);
     }
 
     public <T> List<T> queryList(String id, Object param) {
-        DataSourceContextHolder.setDatabaseType("slave");
         return sqlSessionTemplate.selectList(id,param);
     }
 
     public <T> List<T> queryList(String id) {
-        return null;
+        return sqlSessionTemplate.selectList(id);
     }
 
     public <T> T queryOne(String id, Object param) {
-        return null;
+        return sqlSessionTemplate.selectOne(id,param);
     }
 
     public <T> T queryOne(String id) {

@@ -8,7 +8,7 @@ mybatis:
 
 
 spring:
-  datasource:
+  mastersource:
     url: jdbc:mysql://62.234.116.161:3306/angla?useUnicode=true&characterEncoding=utf8
     username: root
     password: angla
