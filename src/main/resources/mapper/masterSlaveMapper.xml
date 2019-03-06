@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.angla.demo.dao.MasterSlaveDao" >
+    <sql id="column_all" >
+        id,name
+    </sql>
+
+    <sql id="Where_Clause">
+        <where>
+            1 = 1
+            <if test="id != null" >
+              AND id = #{id}
+            </if>
+            <if test="name != null and name != ''" >
+              AND name = #{name}
+            </if>
+        </where>
+    </sql>
+
+    <select id="getList" resultType="masterSlave" parameterType="masterSlave">
+        SELECT
+          <include refid="column_all"/>
+        FROM t_master_slave
+        <include refid="Where_Clause"/>
+        ORDER BY id DESC
+    </select>
+
+    <select id="getOneById" resultType="masterSlave" parameterType="java.lang.Long">
+        SELECT
+        <include refid="column_all"/>
+        FROM t_master_slave
+        WHERE
+        id = #{id}
+        limit 0,1
+    </select>
+
+    <select id="getOne" resultType="masterSlave" parameterType="masterSlave">
+        SELECT
+        <include refid="column_all"/>
+        FROM t_master_slave
+        <include refid="Where_Clause"/>
+    </select>
+
+    <insert id="insert" parameterType="masterSlave">
+        insert into t_master_slave (
+        id,name)
+        values (#{id},#{name})
+    </insert>
+
+
+    <update id="update" parameterType="masterSlave" >
+        update t_master_slave
+        <set>
+            <if test="name != null and name != ''" >
+                name = #{name},
+            </if>
+            id = #{id}
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="delete" parameterType="masterSlave">
+        UPDATE t_master_slave
+        SET
+            del_flag = #{delFlag}
+        WHERE
+        id = #{id}
+    </update>
+</mapper>
