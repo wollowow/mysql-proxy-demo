@@ -1,5 +1,7 @@
 package com.angla.demo.datasource;
 
+import com.angla.demo.enums.DataSourceTypeEnum;
+
 /**
  * Title:DataSourceContextHolder
  *
@@ -9,8 +11,8 @@ public class DataSourceContextHolder {
 
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<>();
 
-    public static void setDatabaseType(String dbKey) {
-        contextHolder.set(dbKey);
+    public static void setDatabaseType(DataSourceTypeEnum databaseType) {
+        contextHolder.set(databaseType.getName());
     }
 
     public static String getDatabaseType() {
