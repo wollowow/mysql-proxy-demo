@@ -9,21 +9,21 @@ mybatis:
 
 spring:
   mastersource:
-    url: jdbc:mysql://62.234.116.161:3306/angla?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://masterIp:port/angla?useUnicode=true&characterEncoding=utf8
     username: root
-    password: angla
+    password: ######
     driver-class-name: com.mysql.jdbc.Driver
 
   slavesource1:
-    url: jdbc:mysql://62.234.116.161:3307/angla?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://slave1Ip:port/angla?useUnicode=true&characterEncoding=utf8
     username: root
-    password: angla
+    password: ######
     driver-class-name: com.mysql.jdbc.Driver
 
   slavesource2:
-    url: jdbc:mysql://62.234.116.161:3308/angla?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://slave2Ip:port/angla?useUnicode=true&characterEncoding=utf8
     username: root
-    password: angla
+    password: ######
     driver-class-name: com.mysql.jdbc.Driver
 
 #配置日志

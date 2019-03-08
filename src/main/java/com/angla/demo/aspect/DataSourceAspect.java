@@ -24,10 +24,10 @@ public class DataSourceAspect {
     private static final String[] queryStrs = {"query", "select", "get"};
 
     /**
-     * 定义切入点，切入点为com.angla.demo.commom.CommonDaoImpl下的所有方法
+     * 定义切入点，切入点为com.angla.demo.dao下的所有方法
      */
     @Pointcut("execution(* com.angla.demo.dao.*.*(..))")
-    public void excuteSql() {
+    public void executeSql() {
     }
 
 
@@ -37,7 +37,7 @@ public class DataSourceAspect {
      * @param joinPoint
      * @throws Throwable
      */
-    @Before("excuteSql()")
+    @Before("executeSql()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         String mName = methodSignature.getMethod().getName();
