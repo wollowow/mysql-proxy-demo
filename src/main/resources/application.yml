@@ -6,23 +6,23 @@ mybatis:
 
 spring:
   mastersources:
-  -   url: jdbc:mysql://62.234.116.161:3306/angla?useUnicode=true&characterEncoding=utf8
+  -   url: jdbc:mysql://master1:3306/angla?useUnicode=true&characterEncoding=utf8
       username: root
       password: angla
       driver-class-name: com.mysql.jdbc.Driver
 
-  - url: jdbc:mysql://62.234.116.161:3306/angla?useUnicode=true&characterEncoding=utf8
+  - url: jdbc:mysql://master2:3306/angla?useUnicode=true&characterEncoding=utf8
     username: root
     password: angla
     driver-class-name: com.mysql.jdbc.Driver
 
   slavesources:
-  -   url: jdbc:mysql://62.234.116.161:3307/angla?useUnicode=true&characterEncoding=utf8
+  -   url: jdbc:mysql://slave1:3307/angla?useUnicode=true&characterEncoding=utf8
       username: root
       password: angla
       driver-class-name: com.mysql.jdbc.Driver
 
-  -   url: jdbc:mysql://62.234.116.161:3308/angla?useUnicode=true&characterEncoding=utf8
+  -   url: jdbc:mysql://slave2:3308/angla?useUnicode=true&characterEncoding=utf8
       username: root
       password: angla
       driver-class-name: com.mysql.jdbc.Driver
