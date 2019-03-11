@@ -42,7 +42,6 @@ public class DataSourceAspect {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         String mName = methodSignature.getMethod().getName();
         log.info("拦截sql方法:{}", mName);
-        log.info("当前数据源:{}", DataSourceContextHolder.getDatabaseType());
         DataSourceContextHolder.setDatabaseType(DataSourceTypeEnum.DATA_SOURCE_MASTER);
         for (String name : queryStrs) {
             if (mName.startsWith(name)) {
@@ -51,6 +50,8 @@ public class DataSourceAspect {
                 break;
             }
         }
+        log.info("当前数据源:{}",DataSourceContextHolder.getDatabaseType().getName());
+
     }
 
 }

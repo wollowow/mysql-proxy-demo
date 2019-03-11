@@ -26,7 +26,7 @@ public class MasterSlaveServiceImpl implements MasterSlaveService {
     }
 
     public Object getList(MasterSlaveModel masterSlave) {
-        return masterSlaveDao.queryList(masterSlave);
+        return masterSlaveDao.getList(masterSlave);
     }
 
 }

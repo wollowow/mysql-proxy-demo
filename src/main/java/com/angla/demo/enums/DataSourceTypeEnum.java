@@ -3,11 +3,11 @@ package com.angla.demo.enums;
 /**
  * Title:DataSourceTypeEnum
  *
- * @author liumenghua
+ * @author angla
  **/
 
 public enum  DataSourceTypeEnum {
-    
+
     DATA_SOURCE_MASTER(1,"master"),
     DATA_SOURCE_SLAVE(2,"slave");
 

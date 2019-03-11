@@ -5,17 +5,20 @@ import com.angla.demo.enums.DataSourceTypeEnum;
 /**
  * Title:DataSourceContextHolder
  *
- * @author liumenghua
+ * @author angla
  **/
 public class DataSourceContextHolder {
 
-    private static final ThreadLocal<String> contextHolder = new ThreadLocal<>();
+    private static final ThreadLocal<DataSourceTypeEnum> contextHolder = new ThreadLocal<>();
 
+    static {
+        setDatabaseType(DataSourceTypeEnum.DATA_SOURCE_MASTER);
+    }
     public static void setDatabaseType(DataSourceTypeEnum databaseType) {
-        contextHolder.set(databaseType.getName());
+        contextHolder.set(databaseType);
     }
 
-    public static String getDatabaseType() {
+    public static DataSourceTypeEnum getDatabaseType() {
         return contextHolder.get();
     }
 

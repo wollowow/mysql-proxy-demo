@@ -5,7 +5,6 @@ import com.angla.demo.enums.DataSourceTypeEnum;
 import com.angla.demo.intercept.SqlInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +13,13 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -26,7 +27,7 @@ import javax.sql.DataSource;
 /**
  * Title:MybatisConfiguration
  *
- * @author liumenghua
+ * @author angla
  **/
 
 @Configuration
@@ -35,33 +36,43 @@ public class MybatisConfiguration {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private DataSourceProperties dataSourceProperties;
+
     @Bean
     SqlInterceptor sqlExplainInterceptor() {
         return new SqlInterceptor();
     }
+
     /**
      * 创建数据源(数据源的名称：方法名可以取为XXXDataSource(),XXX为数据库名称,该名称也就是数据源的名称)
      */
     @Bean
-    public DataSource masterDataSource() throws Exception {
-        Properties props = new Properties();
-        props.put("driverClassName", env.getProperty("spring.mastersource.driver-class-name"));
-        props.put("url", env.getProperty("spring.mastersource.url"));
-        props.put("username", env.getProperty("spring.mastersource.username"));
-        props.put("password", env.getProperty("spring.mastersource.password"));
-        return DruidDataSourceFactory.createDataSource(props);
+    public List<DataSource> masterDataSources() throws Exception {
+
+        List<Map<String, String>> mastersources = dataSourceProperties.getMastersources();
+        if (CollectionUtils.isEmpty(mastersources)) {
+            throw new IllegalArgumentException("需要至少一个主数据源");
+        }
+        List<DataSource> dataSources = new ArrayList<>();
+        for (Map map : mastersources) {
+            dataSources.add(DruidDataSourceFactory.createDataSource(map));
+        }
+        return dataSources;
     }
 
     @Bean
-    public DataSource slaveDataSource() throws Exception {
-        Properties props = new Properties();
-        props.put("driverClassName", env.getProperty("spring.slavesource1.driver-class-name"));
-        props.put("url", env.getProperty("spring.slavesource1.url"));
-        props.put("username", env.getProperty("spring.slavesource1.username"));
-        props.put("password", env.getProperty("spring.slavesource1.password"));
-        return DruidDataSourceFactory.createDataSource(props);
+    public List<DataSource> slaveDataSources() throws Exception {
+        List<Map<String, String>> slavesources = dataSourceProperties.getSlavesources();
+        if (CollectionUtils.isEmpty(slavesources)) {
+            throw new IllegalArgumentException("需要至少一个从数据源");
+        }
+        List<DataSource> dataSources = new ArrayList<>();
+        for (Map map : slavesources) {
+            dataSources.add(DruidDataSourceFactory.createDataSource(map));
+        }
+        return dataSources;
     }
-
 
     /**
      * @Primary 该注解表示在同一个接口有多个实现类可以注入的时候，默认选择哪一个，而不是让@autowire注解报错
@@ -69,15 +80,19 @@ public class MybatisConfiguration {
      */
     @Bean
     @Primary
-    @DependsOn({"masterDataSource","slaveDataSource"})
-    public DynamicDataSource dataSource(DataSource masterDataSource, DataSource slaveDataSource) {
+    @DependsOn({"masterDataSources", "slaveDataSources"})
+    public DynamicDataSource dataSource(List<DataSource> masterDataSources, List<DataSource> slaveDataSources) {
         Map<Object, Object> targetDataSources = new HashMap<>();
-        targetDataSources.put(DataSourceTypeEnum.DATA_SOURCE_MASTER.getName(), masterDataSource);
-        targetDataSources.put(DataSourceTypeEnum.DATA_SOURCE_SLAVE.getName(),slaveDataSource);
+        for (int i = 0; i < masterDataSources.size(); i++) {
+            targetDataSources.put(DataSourceTypeEnum.DATA_SOURCE_MASTER.getName() + i, masterDataSources.get(i));
+        }
+        for (int i = 0; i < slaveDataSources.size(); i++) {
+            targetDataSources.put(DataSourceTypeEnum.DATA_SOURCE_SLAVE.getName() + i, slaveDataSources.get(i));
+        }
 
         DynamicDataSource dataSource = new DynamicDataSource();
         dataSource.setTargetDataSources(targetDataSources);// 该方法是AbstractRoutingDataSource的方法
-        dataSource.setDefaultTargetDataSource(slaveDataSource);// 默认的datasource设置为myTestDbDataSource
+        dataSource.setDefaultTargetDataSource(slaveDataSources.get(0));// 默认的datasource设置为myTestDbDataSource
 
         return dataSource;
     }
@@ -104,9 +119,4 @@ public class MybatisConfiguration {
         return new DataSourceTransactionManager(dataSource);
     }
 
-    @Bean
-    @DependsOn("sqlSessionFactory")
-    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory){
-        return new SqlSessionTemplate(sqlSessionFactory);
-    }
 }

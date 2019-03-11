@@ -13,5 +13,5 @@ public interface MasterSlaveDao  {
 
     int insert(MasterSlaveModel masterSlave);
 
-    Object queryList(MasterSlaveModel masterSlave);
+    Object getList(MasterSlaveModel masterSlave);
 }

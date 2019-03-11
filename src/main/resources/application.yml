@@ -1,6 +1,3 @@
-
-
-
 #公共配置与profiles选择无关
 mybatis:
   typeAliasesPackage: com.angla.demo.model
@@ -8,23 +5,27 @@ mybatis:
 
 
 spring:
-  mastersource:
-    url: jdbc:mysql://masterIp:port/angla?useUnicode=true&characterEncoding=utf8
+  mastersources:
+  -   url: jdbc:mysql://62.234.116.161:3306/angla?useUnicode=true&characterEncoding=utf8
+      username: root
+      password: angla
+      driver-class-name: com.mysql.jdbc.Driver
+
+  - url: jdbc:mysql://62.234.116.161:3306/angla?useUnicode=true&characterEncoding=utf8
     username: root
-    password: ######
+    password: angla
     driver-class-name: com.mysql.jdbc.Driver
 
-  slavesource1:
-    url: jdbc:mysql://slave1Ip:port/angla?useUnicode=true&characterEncoding=utf8
-    username: root
-    password: ######
-    driver-class-name: com.mysql.jdbc.Driver
+  slavesources:
+  -   url: jdbc:mysql://62.234.116.161:3307/angla?useUnicode=true&characterEncoding=utf8
+      username: root
+      password: angla
+      driver-class-name: com.mysql.jdbc.Driver
 
-  slavesource2:
-    url: jdbc:mysql://slave2Ip:port/angla?useUnicode=true&characterEncoding=utf8
-    username: root
-    password: ######
-    driver-class-name: com.mysql.jdbc.Driver
+  -   url: jdbc:mysql://62.234.116.161:3308/angla?useUnicode=true&characterEncoding=utf8
+      username: root
+      password: angla
+      driver-class-name: com.mysql.jdbc.Driver
 
 #配置日志
 logging:
